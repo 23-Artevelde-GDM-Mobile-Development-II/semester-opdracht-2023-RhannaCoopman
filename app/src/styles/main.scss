@@ -1,0 +1,21 @@
+$white: #FDFDFA;
+$lightbeige: #DDDCC5;
+$darkbeige: #958976;
+$grey: #6A6A61;
+$dark: #1D2326;
+$detail: #611427;
+$img_placeholder: #B9B9B9;
+
+.btn {
+  padding: .125rem .3125rem;
+
+}
+
+.btn--primary {
+  background-color: $detail;
+
+  border: 1px solid $lightbeige;
+
+
+  
+}

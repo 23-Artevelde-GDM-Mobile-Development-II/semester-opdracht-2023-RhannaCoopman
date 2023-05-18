@@ -1,0 +1,32 @@
+.footer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 1rem 2rem;
+
+    background-color: rgb(50, 50, 50);
+}
+
+.image {
+    border-radius: 50%;
+}
+
+.list {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    
+}
+
+.list__item a{
+    color: white;
+    text-decoration: none;
+    transition: all .3s ease;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.list__item a:hover{
+    border-bottom: .3rem solid white;
+}

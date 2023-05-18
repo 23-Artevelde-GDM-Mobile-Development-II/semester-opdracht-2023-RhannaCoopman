@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form method="POST">
+        <input class="form__name" name="name" type="text">
+        <input class="form__age" name="age" type="number">
+        <input class="form__address" name="address" type="text">
+
+        <input class="submitButton" type="submit" value="Verstuur">
+    </form>
+
+
+    <script>
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+
+            const dataObject = JSON.stringify({
+                name: document.querySelector('.form__name').value,
+                age: document.querySelector('.form__age').value,
+                address: document.querySelector('.form__address').value,
+            });
+
+            console.log(dataObject);
+
+            const response = await fetch('http://localhost:8081/klanten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:  `{"name":"dawdawd","age":"21","address":"412das"}`,
+            });
+
+            const responseData = await response.json();
+            console.log(responseData);
+        };
+
+
+
+        document.querySelector('.submitButton').addEventListener('click', handleSumbit)
+
+    </script>
+</body>
+
+</html>
