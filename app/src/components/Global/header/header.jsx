@@ -6,15 +6,15 @@ import style from './header.module.css';
 const Header = () => {
     return (
         <header className={style.header}> 
-            <img className={style.image} src='https://picsum.photos/100/100' alt='logo'/>
+            <h2>Immosite</h2>
             <ol className={style.list}>
-                <li className={style.list__item}><Link to={ROUTES.home}>Home</Link></li>
-                <li className={style.list__item}><Link to={ROUTES.contact}>Contact</Link></li>
+                <li className={`${style.list__item} ${style.btn__secundairy}`}><Link to={ROUTES.home}>Alle panden</Link></li>
+                <li className={`${style.list__item} ${style.btn__secundairy}`}><Link to={ROUTES.home}>Te koop</Link></li>
+                <li className={`${style.list__item} ${style.btn__secundairy}`}><Link to={ROUTES.contact}>Te huur</Link></li>
+
+                <li className={`${style.list__item} ${style.btn__primary}`}><Link to={ROUTES.login}>Mijn account</Link></li>
+
             </ol>
-
-
-
-
         </header>
     );
 };

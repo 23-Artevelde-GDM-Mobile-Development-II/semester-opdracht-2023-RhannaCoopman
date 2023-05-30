@@ -1,0 +1,56 @@
+.TwoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.ThreeColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 15px;
+  grid-row-gap: 25px;
+
+  margin: 20px 0;
+}
+
+.FourColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .ThreeColumnGrid {
+    /* background-color: rgb(44, 190, 105); */
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 15px;
+    grid-row-gap: 25px;
+  
+    margin: 20px 0;
+    }
+
+}
+
+@media (max-width: 600px) {
+  .ThreeColumnGrid {
+    /* background-color: aqua; */
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-column-gap: 15px;
+    grid-row-gap: 25px;
+  
+    margin: 20px 0;
+    }
+
+    .TwoColumnGrid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      grid-column-gap: 10px;
+      grid-row-gap: 10px;
+    }
+
+}

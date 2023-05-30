@@ -1,257 +1,282 @@
-
+import React, { useEffect, useState } from 'react';
 import style from "./home.module.css";
-import "../../styles/main.css";
-import { useState } from "react";
+import HouseCard from '../../Components/houseCard/HouseCard';
+import useMutation from "../../hooks/useMutation";
+import useFetch from "../../hooks/useFetch";
+import FullwidthContainer from '../../Components/Containers/FullwidthContainer.js';
+import Container from '../../Components/Containers/Container.js';
+import SmallContainer from '../../Components/Containers/SmallContainer.js';
+import ThreeColumnGrid from '../../Components/Grids/ThreeColumns';
 
 
 const Home = () => {
-    const [responses, setResponses] = useState();
 
-    const handleGetDefault = async () => {
-        //Een basis fetch op onze gemaakte API
-        //De response die we terug krijgen is een gewone string, om dit om te zetten gebruiken we
-        //de build in .json() functie
-        const responses = await fetch('http://127.0.0.1:8081/test', {
-            method: "GET"
-        }).then(response => response.json())
+    // const [data, setData] = useState();
+    const [filteredData, setFilteredData] = useState();
 
-        //De respons die ik krijg zet ik in mijn variabele. Ik vorm deze terug om naar een string
-        // zodat ik die gewoon in mijn pagina kan plaatsen om eens te bekijken. Voor de meeste use-cases is dit niet nodig
-        const value = responses[0]["name"];
-        setResponses(value);
-        console.log(value)
+    const [searchValues, setSearchValues] = useState({
+        location: '',
+        min_price: '',
+        max_price: '',
+        min_surface: '',
+        max_surface: '',
+        min_rooms: '',
+        max_rooms: '',
+    })
+
+    // Async function which sets the values for search
+    const handleChange = async e => {
+        setSearchValues({
+            ...searchValues,
+            [e.currentTarget.name]: e.currentTarget.value
+        })
+
+        console.log(searchValues);
     }
 
-    return (
-        <main>
-            <section className={style.dataSection}>
-                <h2 className={style.dataTitle}>Get Data</h2>
-                <button className={style.dataButton} onClick={handleGetDefault}>Fetch it</button>
-                <p>Response:</p>
-                <div className={style.dataOutput}>{responses}</div>
 
-            </section>
+    const {
+        isLoading,
+        error,
+        invalidate,
+        data: houses,
+      } = useFetch("/houses");
 
-            <h1 className={style.title}>Home</h1>
-            <button className={"btn btn--primary"}>Primary button</button>
-            <button className={"btn btn--secundairy"}>Secundairy button</button>
+      if (error) {
+        return <p>{error}</p>;
+      }
 
-            <section className={"grid card__container"}>
 
-                <div className={"card"}>
-                    <div className={"card__image"}>
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
 
-                    </div>
+    
 
-                    <div className={"card__text"}>
+    // const handleGetDefault = async () => {
+    //     //Een basis fetch op onze gemaakte API
+    //     //De response die we terug krijgen is een gewone string, om dit om te zetten gebruiken we
+    //     //de build in .json() functie
+    //     const responses = await fetch('http://127.0.0.1:5000/houses', {
+    //         method: "GET"
+    //     }).then(response => response.json())
 
-                    </div>
-                </div>
+    //     //De respons die ik krijg zet ik in mijn variabele. Ik vorm deze terug om naar een string
+    //     // zodat ik die gewoon in mijn pagina kan plaatsen om eens te bekijken. Voor de meeste use-cases is dit niet nodig
+    //     const value = responses;
+    //     setData(value);
+    //     console.log(value)
+    // }
 
-                <div className={"card"}>
-                    <div className={"card__image"}>
 
-                    </div>
+  // Function that filters the blogpost on the searchValues
+    const filterHouses = (e) => {
 
-                    <div className={"card__text"}>
+        e.preventDefault()
 
-                    </div>
-                </div>
+        let dataCopy = structuredClone(houses);
 
-                <div className={"card"}>
-                    <div className={"card__savebutton"}>
-                        <i></i>
-                        <div className={"card__savebutton__icon"}>O</div>
-                    </div>
+        dataCopy = dataCopy.filter(dataItem =>
+            // dataItem.city_id.includes(searchValues.location) 
+            // && 
+            dataItem.price > (searchValues.min_price)
+            &&
+            dataItem.price < (searchValues.max_price)
+            && 
+            dataItem.habitable_surface > (searchValues.min_surface)
+            &&
+            dataItem.habitable_surface < (searchValues.max_surface)
+            && 
+            dataItem.bedrooms > (searchValues.min_rooms)
+            &&
+            dataItem.bedrooms < (searchValues.max_rooms)
+        );
 
-                    <div className={"card__image"}>
-                        <img className={"card__image__img"} src='https://picsum.photos/400/400' alt='logo'/>
-                    </div>
+        setFilteredData(dataCopy)
 
-                    <div className={"card__text"}>
-                        <h4 className={"card__text__title"}>Woonst te koop</h4>
+        console.log(filteredData)
+}
 
-                        <p className={"card__text__attributes"}>160 m2 - 3 slaapkamers - 2 badkamers</p>
+//   // Stores fetched data
+//     useEffect(() => {
+//         let isActive = true;
 
-                        <p className={"card__text__location_place"}>Brugge</p>
+//         if(!data){
+//             if(isActive) {
+//                 handleGetDefault()
+//             }
+//         }
+//         return () => isActive = false;
+//     }, [])
 
-                        <p className={"card__text__price"}>€ 152.900</p>
-                    </div>
-                </div>
+    
+    // Renders
+        // If there is  no data (yet), shows loading screen
+    if(!houses) {
+        return (
+            <p>Loading ...</p>
+        )
+    } else {
+        // If there is data but none matched all searchvalues
+        if(houses.length < 1) {
 
-                <div className={"card"}>
-                    <div className={"card__image"}>
 
-                    </div>
+            console.log(houses);
 
-                    <div className={"card__text"}>
+            return (
+                <SmallContainer>
+                                <p>Geen woningen die aan uw wensen voldoen.</p>
 
-                    </div>
-                </div>
+                                <form className="form">
+                                <h2>Vertel ons uw wensen</h2>
+    
+                                {/* Location */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor='location'>Locatie</label></div>
+    
+                                    <input type={'text'} onChange={handleChange} value={searchValues.location} name='location' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_location'}
+                                    placeholder={'Typ om op titel te zoeken'}  />
+                                </div>
+    
+                                {/* Price */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Prijs</label></div>
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_price | null} name='min_price' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_price'}
+                                    placeholder={'Minimum prijs'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_price | null} name='max_price' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_price'}
+                                    placeholder={'Maximum prijs'}  />
+    
+                                </div>
+    
+                                {/* Habitable surface */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Bewoonbaar oppervlak</label></div>
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_surface} name='min_surface' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_surface'}
+                                    placeholder={'Minimum bewoonbaar oppervlak'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_surface} name='max_surface' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_surface'}
+                                    placeholder={'Maximum bewoonbaar oppervlak'}  />
+    
+                                </div>
+    
+                                {/* Bedrooms */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Slaapkamers</label></div>
 
-            </section>
-
-            <section className={"grid2"}>
-            <table className={"table"}>
-                    <tr className={"table__title"}>
-                        <th className={"table__title__title"}>Gebouwinfo</th>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Bouwjaar</td>
-                        <td className={"table__content__value"}>1987</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Oppervlakte</td>
-                        <td className={"table__content__value"}>117 m2</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Zolder</td>
-                        <td className={"table__content__value"}>Ja</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Kelder</td>
-                        <td className={"table__content__value"}>Ja</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Zwembad</td>
-                        <td className={"table__content__value"}>Nee</td>
-                    </tr>
-
-                    <tr className={"table__title"}>
-                        <th className={"table__title__title"}>Energie</th>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Energielabel</td>
-                        <td className={"table__content__value"}>C</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Zonnepanelen</td>
-                        <td className={"table__content__value"}>Ja</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Verwarming</td>
-                        <td className={"table__content__value"}>Centrale verwarming</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Beglazing</td>
-                        <td className={"table__content__value"}>Dubbel</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Warmtepomp</td>
-                        <td className={"table__content__value"}>Nee</td>
-                    </tr>
-
-                    <tr className={"table__title"}>
-                        <th className={"table__title__title"}>Financieel</th>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Prijs</td>
-                        <td className={"table__content__value"}>169.000</td>
-                    </tr>
-
-                    <tr className={"table__content"}>
-                        <td className={"table__content__key"}>Kadastraal inkomen</td>
-                        <td className={"table__content__value"}>400</td>
-                    </tr>
-                </table>
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_rooms} name='min_rooms' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_rooms'}
+                                    placeholder={'Minimum aantal kamers'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_rooms} name='max_rooms' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_rooms'}
+                                    placeholder={'Maximum aantal kamers'}  />
+    
+                                </div>
+                                    
+                                <button className="btn btn--primary" onClick={filterHouses}>Ontdek onze panden</button>
+                            </form>
+                </SmallContainer>
                 
-                {/* <table>
-                    <tr>
-                        <th>Energie</th>
-                        <th></th>
-                    </tr>
+            )
+        // If there is data
+        } else {
+            console.log(houses);
+            return (
+                <FullwidthContainer>
+                    {/* Hero */}
+                    <section id="hero" className="container--full">
+                        <div className={style.container}>
+                            <h1>Immowebsite</h1>
+                            <h6>Vind de woning van uw dromen</h6>
+                            <br></br>
+    
+                            <form className="form">
+                                <h2>Vertel ons uw wensen</h2>
+    
+                                {/* Location */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor='location'>Locatie</label></div>
+    
+                                    <input type={'text'} onChange={handleChange} value={searchValues.location} name='location' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_location'}
+                                    placeholder={'Typ om op titel te zoeken'}  />
+                                </div>
+    
+                                {/* Price */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Prijs</label></div>
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_price} name='min_price' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_price'}
+                                    placeholder={'Minimum prijs'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_price} name='max_price' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_price'}
+                                    placeholder={'Maximum prijs'}  />
+    
+                                </div>
+    
+                                {/* Habitable surface */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Bewoonbaar oppervlak</label></div>
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_surface} name='min_surface' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_surface'}
+                                    placeholder={'Minimum bewoonbaar oppervlak'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_surface} name='max_surface' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_surface'}
+                                    placeholder={'Maximum bewoonbaar oppervlak'}  />
+    
+                                </div>
+    
+                                {/* Bedrooms */}
+                                <div className="form__field form__field--small">
+                                    <div className="form__label"><label className="form__label" htmlFor="">Slaapkamers</label></div>
 
-                    <tr>
-                        <td>Beschrijving</td>
-                        <td>Maria Anders</td>
-                    </tr>
+                                    <input type={'number'} onChange={handleChange} value={searchValues.min_rooms} name='min_rooms' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_min_rooms'}
+                                    placeholder={'Minimum aantal kamers'}  />
+    
+                                    <input type={'number'} onChange={handleChange} value={searchValues.max_rooms} name='max_rooms' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_rooms'}
+                                    placeholder={'Maximum aantal kamers'}  />
+    
+                                </div>
+                                    
+                                <button className="btn btn--primary" onClick={filterHouses}>Ontdek onze panden</button>
+                            </form>
+                        </div>
+                    </section>
+    
+                    {/* Houses */}
+                    <Container id="house_section">
+                        <h2>Onze nieuwste panden</h2>
+    
+                        <ThreeColumnGrid id="HouseGrid">
+    
+{                       houses.map((house, index) => {
+                            return (
+                                <HouseCard house={house} key={index}/>
+                            )
+                        })}
+    
+                        </ThreeColumnGrid>
+    
+                    </Container>
+                </FullwidthContainer>
+            );
+        }
 
-                    <tr>
-                        <td>Beschrijving</td>
-                        <td>Maria Anders</td>
-                    </tr>
-
-                    <tr>
-                        <td>Beschrijving</td>
-                        <td>Maria Anders</td>
-                    </tr>
-
-                    <tr>
-                        <td>Beschrijving</td>
-                        <td>Maria Anders</td>
-                    </tr>
-
-                    <tr>
-                        <td>Beschrijving</td>
-                        <td>Maria Anders</td>
-                    </tr>
-                </table> */}
-
-            </section>
-
-            <section className={"grid3"}>
-                <div className={"card"}>
-                    <div className={"card__image"}>
-                        <img className={"card__image__img"} src='https://picsum.photos/400/400' alt='logo'/>
-                    </div>
-
-                    <div className={"card__text"}>
-                        <p className={"card__text__label"}>Bouwjaar</p>
-                    </div>
-                </div>
-                <div className={"testdiv"}></div>
-                <div className={"testdiv"}></div>
-                <div className={"testdiv"}></div>
-            </section>
-
-            <section className={"testcontainer"}>
-            <form class="form">
-                <div class="form__field form__field--small">
-                    <div class="form__label"><label class="form__label" for="">Inputfield</label></div>
-                    
-                    <input class="form__input form__input__text" />
-                </div>
-
-                <div class="form__field form__field--small">
-                    <div class="form__label"><label class="form__label" for="">Inputfield</label></div>
-                    
-                    <input class="form__input form__input__text" />
-                </div>
-                
-                <div class="form__field form__field--big">
-                    <div class="form__label"><label class="form__label" for="w3review">Review of W3Schools:</label></div>
-
-                    <textarea class="form__input form__input__textarea" id="w3review" name="w3review" rows="3">
-                    
-                    </textarea>
-                </div>
-                <div class="form__field form__field--big">
-                    <div class="form__label"><label class="form__label" for="cars">Choose a car:</label></div>
-
-                    <select class="form__input form__input__select" name="cars" id="cars">
-                        <option value="volvo">Volvo</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                        <option value="audi">Audi</option>
-                    </select>
-                </div>
-                <button class="btn btn--primary">Register</button>
-            </form>
-            </section>
-
-        </main>
-    );
+    }
 };
 
 export default Home;

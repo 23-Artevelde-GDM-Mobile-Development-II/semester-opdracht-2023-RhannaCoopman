@@ -10,12 +10,14 @@
   font-family: Nobel, sans-serif;
 
   box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0;
 
 }
 
 /* Buttons */
 .btn {
-  padding: 1rem 3rem;
+  padding: 0.8rem 2rem;
 
   cursor: pointer;
 
@@ -73,7 +75,7 @@
   color: var(--lightbeige);
 }
 
-/* Card */
+/* Card
 .card {
   width: 100%;
 
@@ -151,17 +153,39 @@
 
   text-align: end;
 
-}
+} */
 
 
 
 /* Typography */
-/* h4 {
+
+h1 {
+  font-size: 50px;
+  font-weight: 200;
+
+  color: var(--darkbeige)
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 400;
+
+  color: var(--darkbeige)
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 400;
+
+  color: var(--grey)
+}
+
+h4 {
+  font-size: 14px;
   font-weight: 600;
 
-  margin-bottom: 5rem;
-  padding-bottom: 5rem;
-} */
+  color: var(--darkbeige)
+}
 
 p {
   margin-bottom: 0.5rem;
@@ -222,6 +246,18 @@ p {
   line-height: 15px;
 
   font-weight: 600;
+}
+
+/* Containers */
+.container--full {
+  width: 100vw;
+  min-height: 100vh;
+
+  /* background-color: aqua; */
+}
+
+.container-70 {
+  width: 70%;
 }
 
 /* TestDiv */
@@ -322,10 +358,6 @@ p {
 }
 
 @media (max-width: 600px) {
-  .form {
-    /* background-color: lightgreen; */
-  }
-
   .form__field--small {
     width: 100%;
   }

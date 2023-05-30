@@ -1,124 +1,40 @@
-require("dotenv").config();
+import "dotenv/config";
+import express from "express";
+import passport from "passport";
 
-const express = require("express");
-const cors = require("cors");
+import { registerMiddleware } from "./middleware/index.js";
+import  LocalStrategy from "./middleware/auth/LocalStrategy.js";
+import JwtStrategy from "./middleware/auth/JwtStrategy.js";
+import { registerRoutes } from "./routers/routers.js";
 
+//Create an Express app:
 const app = express();
-const pool = require(__dirname + "/db");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 
-app.use(cors());
-app.use(express.json());
+//Register middleware:
+registerMiddleware(app);
 
-app.get('/test', async (req, res) => {
+//Initialize MongoDB client and database:
+app.use(passport.initialize());
+// Use LocalStrategy to verify the user credentials locally
+passport.use("local", LocalStrategy);
 
-    try {
-        
-        const { rows }  = await pool.query('SELECT * FROM "test"')
-        res.json(rows)
+// Use JwtStrategy to verify the user credentials with a JWT token
+passport.use("jwt", JwtStrategy);
 
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-
-})
-
-app.get('/klanten', async (req, res) => {
-
-    try {
-        
-        const { rows }  = await pool.query('SELECT * FROM klanten')
-        res.json(rows)
-
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-
-})
-
-app.get('/klanten/:id', async (req, res) => {
-
-    try {
-        
-        const{rows} = await pool.query('SELECT * FROM klanten WHERE id = $1',[ req.params.id])
-        res.json(rows)
-
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-
-})
-
-app.get('/klanten/:id/:age', async (req, res) => {
-
-    try {
-        
-      const { rows }  = await pool.query('SELECT * FROM klanten WHERE id = $1 AND leeftijd = $2', [
-        req.params.id,
-        req.params.age
-        ])
-      res.json(rows)
-
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-
-})
-
-app.post('/klanten', async (req, res) => {
-    try {
-        
-        const data = req.body
-
-        const { rows } = await pool.query("INSERT INTO klanten (naam, leeftijd, adres) VALUES ($1, $2, $3) RETURNING *",
-        [
-            data.name,
-            data.age,
-            data.address
-        ])
-
-        res.json(rows)
-
-    } catch(err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-})
-
-app.put('/klanten/:id', async (req, res) => {
-
-    try {
-        
-        const data = req.body
-        
-        const id = req.params.id  
-        const { rows }  = await pool.query('UPDATE klanten SET naam = $1 WHERE id = $2 RETURNING *', [
-            data.name,
-            id
-        ])
-        res.json(rows)
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-})
-
-app.delete('/klanten/:id', async (req, res) => {
-    try {
-        const id = req.params.id
-        const { rows }  = await pool.query('DELETE FROM klanten WHERE id = $1 RETURNING *', [id])
-        res.json(rows)
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
-    }
-})
+registerRoutes(app)
 
 
-app.listen(port, () =>{
-    console.log(`Running on port ${port}`);
-})
+//Start the server and handle server crashes:
+const server = app.listen(port, () => {
+  console.log(`App listening http://${process.env.APP_URL}:${port}`);
+});
+
+const closeServer = () => {
+  server.close();
+  // close the MongoDB client here if needed
+  process.exit();
+};
+
+process.on("SIGINT", () => closeServer());
+process.on("SIGTERM", () => closeServer());

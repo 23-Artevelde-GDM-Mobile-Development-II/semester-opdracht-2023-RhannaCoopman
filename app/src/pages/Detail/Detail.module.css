@@ -1,0 +1,92 @@
+.floating__contactbar {
+  width: 70%;
+  background-color: var(--detail);
+  padding: 0.8rem 4rem;
+  border-radius: 8px;
+
+  position: fixed;
+  bottom: 20px;
+  left: 15%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.contactbar__textcontainer {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.contactbar__text--bold {
+  font-weight: 600;
+}
+
+.contactbar__text {
+  color: white;
+}
+
+.contactbar__title {
+  margin-bottom: 1rem;
+}
+
+.btn {
+  padding: 1rem 3rem;
+
+  cursor: pointer;
+
+  margin: .125rem;
+}
+
+.btnPrimary {
+  background-color: var(--detail);
+
+  border: 2px solid var(--lightbeige);
+
+  color: var(--lightbeige);
+  font-weight: 600;
+}
+
+.btnPrimary:hover {
+  background-color: var(--lightbeige);
+
+  border: 2px solid var(--lightbeige);
+
+  color: var(--detail);
+}
+
+.btnPrimary:active {
+  background-color: var(--darkbeige);
+
+  border: 2px solid var(--detail);
+
+  color: var(--detail);
+}
+
+@media (max-width: 1200px) {
+  .floating__contactbar {
+    flex-direction: column-reverse;
+    justify-content: center;
+    width: 90%;
+    bottom: 20px;
+    left: 5%;
+  }
+}
+
+@media (max-width: 600px) {
+  * {
+    font-size: 0.9rem;
+  }
+
+  .floating__contactbar {
+    width: 100%;
+    position: inherit;
+    border-radius: 0;
+    padding: 0.8rem 1rem;
+  }
+
+  .contactbar__textcontainer {
+    display: inline;
+  }
+}

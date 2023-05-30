@@ -1,0 +1,33 @@
+/* Buttons */
+.btn {
+  padding: 0.8rem 2rem;
+
+  cursor: pointer;
+
+  margin: .125rem;
+}
+
+.btn--primary {
+  background-color: var(--detail);
+
+  border: 2px solid var(--lightbeige);
+
+  color: var(--lightbeige);
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background-color: transparent;
+
+  border: 2px solid var(--detail);
+
+  color: var(--detail);
+}
+
+.btn--primary:active {
+  background-color: var(--darkbeige);
+
+  border: 2px solid var(--detail);
+
+  color: var(--detail);
+}
