@@ -8,7 +8,8 @@ import Register from "./Register/Register";
 import TestTest from "./TestTest/TestTest";
 import Detail from "./Detail/Detail";
 import Contact from "./Contact/Contact";
-
+import PrivateProfile from "./PrivateProfile/PrivateProfile";
+import GlobalProfile from "./GlobalProfile/GlobalProfile";
 
 const App = () => {
   return (
@@ -23,9 +24,10 @@ const App = () => {
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/myprofile" element={<PrivateProfile />} />
+          <Route path="/profile/:id" element={<GlobalProfile />} />
+
           <Route path="/test" element={<TestTest />} />
-
-
 
         </Routes>
 

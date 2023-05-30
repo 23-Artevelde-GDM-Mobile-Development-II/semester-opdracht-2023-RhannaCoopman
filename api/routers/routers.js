@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import pool from "../db.js";
 import { createUserData, hash } from "../middleware/auth/hash.js";
 
+
 const registerRegularRoutes = (app) => {
 
   app.post("/login", (req, res, next) => {
@@ -35,7 +36,7 @@ const registerRegularRoutes = (app) => {
   });
 
   app.post("/register", async (req, res) => {
-    console.log(req.body);
+
     const { username, password, email } = req.body;
     try {
       // Check if the username already exists
@@ -49,7 +50,6 @@ const registerRegularRoutes = (app) => {
       if (existingUser) {
         return res.status(400).json({ error: "Username already exists" });
       }
-      console.log('2')
       // Create a new user
       const newUser = createUserData({ username, password, email });
 
@@ -60,7 +60,7 @@ const registerRegularRoutes = (app) => {
       };
       const result = await pool.query(insertQuery);
       const registeredUser = result.rows[0];
-      console.log('3')
+
       // Generate a new token for the registered user
       const token = jwt.sign({ id: registeredUser.id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN_HOURS * 60,
@@ -144,12 +144,13 @@ const registerRegularRoutes = (app) => {
         
         const data = req.body
 
-        const { rows } = await pool.query("INSERT INTO messages (sender_id, building_id, content, receiver_id) VALUES ($1, $2, $3, $4) RETURNING *",
+        const { rows } = await pool.query("INSERT INTO messages (sender_id, building_id, content, receiver_id, send_time) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [
             data.sender_id,
             data.house_id,
             data.message,
-            data.receiver_id
+            data.receiver_id,
+            data.timestamp
         ])
 
         res.json(rows)
@@ -159,6 +160,111 @@ const registerRegularRoutes = (app) => {
         res.status(500).send('Server error')
     }
 })
+
+app.get("/profile/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM users WHERE id = $1",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const user = rows[0];
+
+    // Check if a house with the provided id exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send the house data as a JSON response
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/myprofile/:id", async (req, res) => {
+  const id = req.params.id;
+
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM users WHERE id = $1",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const user = rows[0];
+
+    // Check if a house with the provided id exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send the house data as a JSON response
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/mysavedbuildings/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM saved_buildings WHERE user_id = $1",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const savedBuildings = rows;
+
+    // Check if a house with the provided id exists
+    if (!savedBuildings) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send the house data as a JSON response
+    res.json(savedBuildings);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/mymessages/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE sender_id = $1 OR receiver_id = $1",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const savedBuildings = rows;
+
+    // Check if a house with the provided id exists
+    if (!savedBuildings) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send the house data as a JSON response
+    res.json(savedBuildings);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
   // app.get("/", async (req, res) => {

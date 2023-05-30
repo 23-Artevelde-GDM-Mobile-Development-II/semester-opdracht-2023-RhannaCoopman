@@ -12,7 +12,7 @@ const Header = () => {
                 <li className={`${style.list__item} ${style.btn__secundairy}`}><Link to={ROUTES.home}>Te koop</Link></li>
                 <li className={`${style.list__item} ${style.btn__secundairy}`}><Link to={ROUTES.contact}>Te huur</Link></li>
 
-                <li className={`${style.list__item} ${style.btn__primary}`}><Link to={ROUTES.login}>Mijn account</Link></li>
+                <li className={`${style.list__item} ${style.btn__primary}`}><Link to={`myprofile`}>Mijn account</Link></li>
 
             </ol>
         </header>

@@ -22,6 +22,7 @@ const Detail = () => {
     house_id: id,
     message: '',
     receiver_id: '',
+    timestamp: new Date().toISOString()
   })
 
   const {
@@ -33,8 +34,8 @@ const Detail = () => {
 
   const { mutate } = useMutation();
 
+  // Gets user info
   const user = useAuthContext();
-  console.log(user.user.id);
 
   // Async function which sets the values for contact
 const handleChange = async e => {
@@ -280,7 +281,7 @@ const handleChange = async e => {
         <Input name="firstname" value={data.firstname} onChange={handleChange} />
         <label htmlFor="lastname">Lastname</label>
         <Input name="lastname" value={data.lastname} onChange={handleChange} /> */}
-        <label htmlFor="message">Firstname</label>
+        <label htmlFor="message">Bericht</label>
         <Input name="message" value={data.message} onChange={handleChange} />
 
         <Button type="post" disabled={isLoading} onClick={handleSend}>Registreer</Button>
