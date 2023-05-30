@@ -86,25 +86,38 @@ const registerRegularRoutes = (app) => {
 
   });
 
-  // app.get("/students/:id", async (req, res) => {
-  //   const id = req.params.id;
-  //   console.log(id);
-  //   // const student = await db.collection("students").findOne({
-  //   //   _id: ObjectId(id),
-  //   // });
-
-  //   // if (student) {
-  //   //   res.json(student);
-  //   // } else {
-  //   //   res.status(404).json({ error: "Not found" });
-  //   // }
-  // });
-
   app.get("/house/:id", async (req, res) => {
     const id = req.params.id;
 
     try {
       // Retrieve house information from the database based on the id
+      // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+      const query = {
+        text: "SELECT houses.*, energylabel.name as energylabel, house_type.name as housetype, city.cityname as cityname, city.citycode as citycode, building_type.name as buildingtype, windowtypes.name as windowtype, state.name as state, status.name as status FROM houses INNER JOIN energylabel ON houses.energylabel_id = energylabel.id INNER JOIN house_type ON houses.house_type_id = house_type.id INNER JOIN city ON houses.city_id = city.id INNER JOIN building_type ON houses.buildings_id = building_type.id INNER JOIN windowtypes ON houses.windowtype_id = windowtypes.id INNER JOIN state ON houses.state_id = state.id INNER JOIN status ON houses.status_id = status.id WHERE houses.id = $1",
+        values: [id],
+      };
+      const { rows } = await pool.query(query);
+      const house = rows[0];
+  
+      // Check if a house with the provided id exists
+      if (!house) {
+        return res.status(404).json({ error: "House not found" });
+      }
+  
+      // Send the house data as a JSON response
+      res.json(house);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  app.get("/contact/:id", async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      // Retrieve house information from the database based on the id to know to which realestate agent to send the message
+
       const query = {
         text: "SELECT * FROM houses WHERE id = $1",
         values: [id],
@@ -123,7 +136,29 @@ const registerRegularRoutes = (app) => {
       console.log(error);
       res.status(500).json({ error: "Internal Server Error" });
     }
+
   });
+
+  app.post('/contact', async (req, res) => {
+    try {
+        
+        const data = req.body
+
+        const { rows } = await pool.query("INSERT INTO messages (sender_id, building_id, content, receiver_id) VALUES ($1, $2, $3, $4) RETURNING *",
+        [
+            data.sender_id,
+            data.house_id,
+            data.message,
+            data.receiver_id
+        ])
+
+        res.json(rows)
+
+    } catch(err) {
+        console.log(err.message)
+        res.status(500).send('Server error')
+    }
+})
 
 
   // app.get("/", async (req, res) => {

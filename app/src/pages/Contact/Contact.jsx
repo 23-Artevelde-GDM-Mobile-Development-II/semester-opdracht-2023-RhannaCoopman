@@ -1,55 +1,102 @@
-// import React, { useEffect, useState } from "react";
-// import { Link, useParams } from "react-router-dom";
-// import Loading from "../../components/Global/loading/loading.jsx";
-// import style from "./Contact.module.css";
-// import ROUTES from "../../consts/routes";
+import React, { useState } from 'react';
+import Input from "../../Components/Global/Input/Input";
+import Button from "../../Components/Global/Button/Button";
+import useMutation from "../../hooks/useMutation";
+import Container from '../../Components/Containers/Container';
+import { useParams } from 'react-router-dom';
+import useFetch from '../../hooks/useFetch';
+import Loading from '../../Components/Global/loading/loading';
 
-// const Contact = () => {
-//   const { houseId } = useParams();
 
-//   const [houseData, setHouseData] = useState();
 
-//   // Fetches data from database
-//   const handleGetDefault = async () => {
-//     const responses = await fetch("http://127.0.0.1:8081/houses", {
-//       method: "GET",
-//     }).then((response) => response.json());
+const Contact = ({ onLogin, initialError }) => {
 
-//     setHouseData(responses.filter((house) => house.id === 2)[0]);
-//   };
+  const { id } = useParams();
 
-//   useEffect(() => {
-//     //we maken een nieuwe variable aan om te kijken als deze component actief is
-//     let isActive = true;
+  const [data, setData] = useState({
+    sender_id: 31,
+    house_id: id,
+    message: '',
+    receiver_id: '',
+  })
 
-//     //Indien er nog geen data in de variabele zit gaan we die gaan ophalen door een fetch
-//     if (!houseData) {
-//       //Als deze component nog actief is updaten we de data van onze 2 variabelen
-//       if (isActive) {
-//         handleGetDefault();
-//       }
-//     }
+  const {
+    isLoading,
+    error,
+    invalidate,
+    data: house,
+  } = useFetch(`/contact/${id}`);
 
-//     //Als we de component verlaten zetten we de isActive op false.
-//     //We doen dit zodat de code ook altijd stopt als we de component sluiten
-//     //In uitzonderlijke zou er zonder deze code een bug kunnen ontstaan waardoor we een memoryleak krijgen
-//     return () => (isActive = false);
-//   }, []);
 
-//   console.log(houseData);
 
-//   return (
-//     <section>
-//       <h2>Neem contact op</h2>
-//       <div>
-//         <p>Id: 2</p>
-//       </div>
+  const { mutate } = useMutation();
 
-//       <form class="form">
-        
-//       </form>
-//     </section>
-//   );
-// };
 
-// export default Contact;
+
+if (error) {
+  return <p>{error}</p>;
+}
+
+if (isLoading) {
+  return <Loading />;
+}
+
+// Async function which sets the values for contact
+const handleChange = async e => {
+    setData({
+        ...data,
+        [e.currentTarget.name]: e.currentTarget.value
+    })
+}
+
+
+
+const handleSend = (e) => {
+  e.preventDefault();
+
+  setData({
+    ...data,
+    receiver_id: house.realestate_agent_id
+})
+
+  mutate(`${process.env.REACT_APP_API_URL}/contact`, {
+    method: "POST",
+    data,
+    onSuccess: (data) => {
+      console.log('bericht gestuurd')
+    },
+  });
+};
+
+// const handleSend = (e) => {
+//   e.preventDefault();
+//   setData({
+//     ...data,
+//     receiver_id: house.realestate_agent_id
+// })
+//   console.log(data)
+// }
+
+  return (
+    <Container>
+      <form onSubmit={handleSend}>
+        {error || initialError ? <p>{initialError ?? error}</p> : ''}
+        {/* <label htmlFor="firstname">Firstname</label>
+        <Input name="firstname" value={data.firstname} onChange={handleChange} />
+        <label htmlFor="lastname">Lastname</label>
+        <Input name="lastname" value={data.lastname} onChange={handleChange} /> */}
+        <label htmlFor="message">Firstname</label>
+        <Input name="message" value={data.message} onChange={handleChange} />
+        <p>{house.realestate_agent_id}</p>
+        <Input name="house_id" type={'hidden'} value={id} onChange={handleChange} />
+        <Input name="sender_id" type={'hidden'} value={31} onChange={handleChange} />
+
+
+        <Button type="submit" disabled={isLoading} onClick={handleSend}>Registreer</Button>
+      </form>
+    </Container>
+  );
+
+};
+
+export default Contact;

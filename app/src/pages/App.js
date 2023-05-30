@@ -7,6 +7,7 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import TestTest from "./TestTest/TestTest";
 import Detail from "./Detail/Detail";
+import Contact from "./Contact/Contact";
 
 
 const App = () => {
@@ -17,7 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/house/:id" element={<Detail />} />
-          {/* <Route path="/house/2" element={<Detail />} /> */}
+
+          <Route path="/contact/:id" element={<Contact />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

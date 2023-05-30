@@ -13,7 +13,6 @@ const useMutation = () => {
   // This function is responsible for making an API call with the given url and options
   const mutate = async (url, options = {}) => {
 
-    console.log(options);
     // Set the loading state to true
     setIsLoading(true);
 

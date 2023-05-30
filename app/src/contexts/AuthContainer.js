@@ -21,6 +21,7 @@ const getUserFromStorage = () => {
 const AuthContainer = ({ children }) => {
   // Initialize user state using the getUserFromStorage function
   const [user, setUser] = useState(getUserFromStorage());
+  const [globalError, setGlobalError] = useState()
 
   // useEffect hook to store user object in local storage when it changes
   useEffect(() => {
@@ -39,19 +40,20 @@ const AuthContainer = ({ children }) => {
   // Function to set user state to a user object when user logs in
   const handleLogin = (user) => {
     setUser(user);
+    setGlobalError(null)
   };
 
   // If user exists, wrap child components with the AuthContext Provider and pass user and logout function as props
   if (user) {
     return (
-      <AuthContext.Provider value={{ user: user, logout: handleLogout }}>
+      <AuthContext.Provider value={{ user: user, logout: handleLogout, setGlobalError: setGlobalError}}>
         {children}
       </AuthContext.Provider>
     );
   }
 
-  // If user does not exist, return LoginScreen component and pass handleLogin function as a prop
-  return <Register onLogin={handleLogin} />;
+  // If user does not exist, return Login component and pass handleLogin function as a prop
+  return <Register onLogin={handleLogin} initialError={globalError} />;
 };
 
 // Custom hook to access AuthContext in child components

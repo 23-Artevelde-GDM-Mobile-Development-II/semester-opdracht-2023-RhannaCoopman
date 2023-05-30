@@ -6,7 +6,7 @@ import useFetch from "../../hooks/useFetch";
 import FullwidthContainer from '../../Components/Containers/FullwidthContainer.js';
 import Container from '../../Components/Containers/Container.js';
 import SmallContainer from '../../Components/Containers/SmallContainer.js';
-import ThreeColumnGrid from '../../Components/Grids/ThreeColumns';
+import Grid from '../../Components/Grids/Grid';
 
 
 const Home = () => {
@@ -261,7 +261,7 @@ const Home = () => {
                     <Container id="house_section">
                         <h2>Onze nieuwste panden</h2>
     
-                        <ThreeColumnGrid id="HouseGrid">
+                        <Grid id="HouseGrid" className="ThreeColumnGrid">
     
 {                       houses.map((house, index) => {
                             return (
@@ -269,7 +269,7 @@ const Home = () => {
                             )
                         })}
     
-                        </ThreeColumnGrid>
+                        </Grid>
     
                     </Container>
                 </FullwidthContainer>

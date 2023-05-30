@@ -90,3 +90,47 @@
     display: inline;
   }
 }
+
+/* Table */
+.table {
+  background-color: aquamarine;
+  margin-bottom: 20px;
+}
+
+.table__content {
+  color: var(--darkbeige);
+}
+
+.table__content__key {
+  border-right: 1px solid var(--lightbeige);
+  padding: 5px;
+}
+
+.table__content__value {
+  padding: 5px;
+  padding-left: 10px;
+}
+
+.table__content:hover {
+  background-color: var(--detail);
+  color: var(--lightbeige);
+}
+
+.table__title__title {
+  text-align: left;
+
+  color: var(--grey);
+
+  padding: 20px 0 10px;
+
+  line-height: 15px;
+
+  font-weight: 600;
+}
+
+
+.image__placeholder {
+  width: 100%;
+  aspect-ratio: 3/2;
+  background-color: rgb(167, 167, 167);
+}
