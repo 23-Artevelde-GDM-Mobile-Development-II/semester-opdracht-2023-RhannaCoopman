@@ -11,16 +11,17 @@ import Grid from "../../Components/Grids/Grid.js";
 import useMutation from "../../hooks/useMutation.js";
 import Input from "../../Components/Global/Input/Input.js";
 import Button from "../../Components/Global/Button/Button";
+import { useAuthContext } from "../../contexts/AuthContainer.js";
 
 
 const Detail = () => {
   const { id } = useParams();
 
   const [data, setData] = useState({
-    sender_id: 31,
+    sender_id: '',
     house_id: id,
     message: '',
-    receiver_id: 29,
+    receiver_id: '',
   })
 
   const {
@@ -32,6 +33,9 @@ const Detail = () => {
 
   const { mutate } = useMutation();
 
+  const user = useAuthContext();
+  console.log(user.user.id);
+
   // Async function which sets the values for contact
 const handleChange = async e => {
   setData({
@@ -39,6 +43,7 @@ const handleChange = async e => {
       [e.currentTarget.name]: e.currentTarget.value
   })
 }
+
 
 
   if (error) {
@@ -54,6 +59,7 @@ const handleChange = async e => {
   
     setData({
       ...data,
+      sender_id: user.user.id,
       receiver_id: house.realestate_agent_id
     })
   
