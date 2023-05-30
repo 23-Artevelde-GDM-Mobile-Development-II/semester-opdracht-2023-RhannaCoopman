@@ -5,7 +5,7 @@ import ROUTES from '../../consts/routes';
 
 const HouseCard = ({house, index}) => {
 return (
-  <Link to={`${ROUTES.detail.to}${house.id}`} key={house.id} className="link">
+  <Link to={`/house/${house.id}`} key={house.id} className="link">
                 <div className="card">
                     <div className={"card__savebutton"}>
                         <i></i>

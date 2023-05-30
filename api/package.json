@@ -21,5 +21,8 @@
     "uuid": "^9.0.0",
     "zlib": "^1.0.5"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }

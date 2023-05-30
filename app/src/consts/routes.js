@@ -2,7 +2,7 @@ const ROUTES = {
     home: "/",
     notFound: "*",
     detail: {
-      path: "/detail/:houseId", to: "/detail/"
+      path: "/house/:id", to: "/house/"
     },
 
     contact: {

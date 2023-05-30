@@ -77,21 +77,62 @@ const registerRegularRoutes = (app) => {
   });
 
   app.get("/houses", async (req, res) => {
-    console.log('houses')
     const query = "SELECT * FROM houses";
     const { rows } = await pool.query(query);
+    console.log(rows)
     res.json(rows);
     console.log(rows)
+
+
+  });
+
+  // app.get("/students/:id", async (req, res) => {
+  //   const id = req.params.id;
+  //   console.log(id);
+  //   // const student = await db.collection("students").findOne({
+  //   //   _id: ObjectId(id),
+  //   // });
+
+  //   // if (student) {
+  //   //   res.json(student);
+  //   // } else {
+  //   //   res.status(404).json({ error: "Not found" });
+  //   // }
+  // });
+
+  app.get("/house/:id", async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      // Retrieve house information from the database based on the id
+      const query = {
+        text: "SELECT * FROM houses WHERE id = $1",
+        values: [id],
+      };
+      const { rows } = await pool.query(query);
+      const house = rows[0];
+  
+      // Check if a house with the provided id exists
+      if (!house) {
+        return res.status(404).json({ error: "House not found" });
+      }
+  
+      // Send the house data as a JSON response
+      res.json(house);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   });
 
 
-  app.get("/", async (req, res) => {
-    console.log('houses')
-    const query = "SELECT * FROM houses";
-    const { rows } = await pool.query(query);
-    res.json(rows);
-    console.log(rows)
-  });
+  // app.get("/", async (req, res) => {
+  //   console.log('houses')
+  //   const query = "SELECT * FROM houses";
+  //   const { rows } = await pool.query(query);
+  //   res.json(rows);
+  //   console.log(rows)
+  // });
 };
 
 
