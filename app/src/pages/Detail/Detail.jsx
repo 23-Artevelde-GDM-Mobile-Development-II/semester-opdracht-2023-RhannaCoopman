@@ -45,8 +45,6 @@ const handleChange = async e => {
   })
 }
 
-
-
   if (error) {
     return <p>{error}</p>;
   }
@@ -290,7 +288,7 @@ const handleChange = async e => {
 
 
 
-      {/* <section className={style.floating__contactbar}>
+      <section className={style.floating__contactbar}>
         <Link to={`${ROUTES.contact.to}${house.id}`} key={house.id}>
           <button className={`${style.btn} ${style.btnPrimary}`}>
             Neem contact op
@@ -317,7 +315,7 @@ const handleChange = async e => {
           </div>
         </div>
 
-    </section> */}
+    </section>
     </main>
   );
 

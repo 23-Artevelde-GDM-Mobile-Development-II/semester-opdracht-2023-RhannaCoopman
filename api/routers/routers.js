@@ -141,25 +141,72 @@ const registerRegularRoutes = (app) => {
 
   app.post('/contact', async (req, res) => {
     try {
-        
-        const data = req.body
-
-        const { rows } = await pool.query("INSERT INTO messages (sender_id, building_id, content, receiver_id, send_time) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [
-            data.sender_id,
-            data.house_id,
-            data.message,
-            data.receiver_id,
-            data.timestamp
-        ])
-
-        res.json(rows)
-
-    } catch(err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
+      const data = req.body;
+  
+      // Insert the conversation into the conversations table
+      const conversationQuery = {
+        text: "INSERT INTO conversations (building_id, participant_one, participant_two) VALUES ($1, $2, $3) RETURNING id",
+        values: [data.house_id, data.sender_id, data.receiver_id],
+      };
+      const { rows: conversationRows } = await pool.query(conversationQuery);
+  
+      if (conversationRows.length === 0) {
+        throw new Error("Failed to create conversation");
+      }
+  
+      const conversationId = conversationRows[0].id;
+  
+      // Insert the message into the messages table
+      const messageQuery = {
+        text: "INSERT INTO messages (sender_id, building_id, content, receiver_id, send_time, conversation_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        values: [
+          data.sender_id,
+          data.house_id,
+          data.message,
+          data.receiver_id,
+          data.timestamp,
+          conversationId,
+        ],
+      };
+      const { rows: messageRows } = await pool.query(messageQuery);
+  
+      res.json({ messages: messageRows });
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server error');
     }
-})
+  });
+
+  app.post("/sendmessage", async (req, res) => {
+
+    const data = req.body;
+
+    console.log(data);
+
+    try {
+
+      // Insert the message into the database
+      const messageQuery = {
+        text: "INSERT INTO messages (sender_id, building_id, content, receiver_id, send_time, conversation_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        values: [
+          data.sender_id,
+          data.house_id,
+          data.message,
+          data.receiver_id,
+          data.sendtime,
+          data.conversation_id,
+        ],
+      };
+      const rows = await pool.query(messageQuery);
+
+      res.json( rows );
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
 
 app.get("/profile/:id", async (req, res) => {
   const id = req.params.id;
@@ -243,11 +290,12 @@ app.get("/mysavedbuildings/:id", async (req, res) => {
 app.get("/mymessages/:id", async (req, res) => {
   const id = req.params.id;
 
+
   try {
     // Retrieve house information from the database based on the id
     // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
     const query = {
-      text: "SELECT * FROM messages INNER JOIN users ON messages.sender_id = users.id WHERE sender_id = $1 OR receiver_id = $1",
+      text: "SELECT c.id AS conversation_id, c.building_id, m.id as message_id, m.sender_id, m.receiver_id, m.content, m.send_time FROM conversations AS c INNER JOIN messages AS m ON c.id = m.conversation_id WHERE m.sender_id = $1 OR m.receiver_id = $1 ORDER BY c.building_id, m.send_time;",
       values: [id],
     };
     const { rows } = await pool.query(query);
@@ -266,14 +314,37 @@ app.get("/mymessages/:id", async (req, res) => {
   }
 });
 
+app.patch("/updateUserData/:id", async (req, res) => {
+  const id = req.params.id;
 
-  // app.get("/", async (req, res) => {
-  //   console.log('houses')
-  //   const query = "SELECT * FROM houses";
-  //   const { rows } = await pool.query(query);
-  //   res.json(rows);
-  //   console.log(rows)
-  // });
+  const data = req.body;
+
+  let values = [id];
+  let queryValues = [];
+  let index = 2;
+
+  for (const key in data) {
+    if (data[key].length !== 0) {
+
+      queryValues.push(key + ' = $' + index);
+      values.push(data[key]);
+
+      index++;
+    }
+  }
+
+  const updateQuery = {
+    text: `UPDATE users SET ${queryValues} WHERE id = $1 RETURNING *`,
+    values: values
+  };
+
+  const rows = await pool.query(updateQuery);
+  res.json( rows );
+
+});
+
+
+
 };
 
 
