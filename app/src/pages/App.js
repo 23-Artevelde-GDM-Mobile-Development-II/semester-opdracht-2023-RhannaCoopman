@@ -10,6 +10,8 @@ import Detail from "./Detail/Detail";
 import Contact from "./Contact/Contact";
 import PrivateProfile from "./PrivateProfile/PrivateProfile";
 import GlobalProfile from "./GlobalProfile/GlobalProfile";
+import UpdateHouse from "./MakelaarDashboard/UpdateHouse/UpdateHouse";
+import CreateHouse from "./MakelaarDashboard/CreateHouse/CreateHouse";
 
 const App = () => {
   return (
@@ -26,6 +28,9 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/myprofile" element={<PrivateProfile />} />
           <Route path="/profile/:id" element={<GlobalProfile />} />
+
+          <Route path="/makelaar/createhouse" element={<CreateHouse />} />
+          <Route path="/makelaar/updatehouse/:id" element={<UpdateHouse />} />
 
           <Route path="/test" element={<TestTest />} />
 

@@ -9,6 +9,7 @@ import useMutation from "../../hooks/useMutation";
 import style from "./PrivateProfile.module.css";
 
 const PrivateProfile = () => {
+  
   const userObject = useAuthContext();
   const id = userObject.user.id;
 

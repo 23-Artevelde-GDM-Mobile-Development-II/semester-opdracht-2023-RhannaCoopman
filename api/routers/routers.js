@@ -343,10 +343,95 @@ app.patch("/updateUserData/:id", async (req, res) => {
 
 });
 
+app.post("/makelaar/createhouse", async (req, res) => {
 
+  const data = req.body;
+
+  console.log(data);
+
+  try {
+
+    // Insert the message into the database
+    const houseQuery = {
+      text: "INSERT INTO houses (name, description, image, house_type_id, housenumber, streetname, city_id, status_id, bedrooms, bathrooms, toilets, attic, basement, garage, swimmingspool, parkingspots, habitable_surface, garden_surface, lot_surface, construction_year, buildings_id, cadastral_income, solar_panels, windowtype_id, elevator, available, online_since, state_id, latest_renovation, facades,  price, energylabel_id, realestate_agency_id, realestate_agent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34) RETURNING *",
+      values: [
+        data.name,
+        data.description,
+        data.image,
+        data.house_type_id,
+        data.housenumber,
+        data.streetname,
+        data.city_id,
+        data.status_id,
+        data.bedrooms, 
+        data.bathrooms,
+        data.toilets,
+        data.attic,
+        data.basement,
+        data.garage,
+        data.swimmingspool,
+        data.parkingspots,
+        data.habitable_surface,
+        data.garden_surface,
+        data.lot_surface,
+        data.construction_year,
+        data.buildings_id,
+        data.cadastral_income,
+        data.solar_panels,
+        data.windowtype_id,
+        data.elevator,
+        data.available,
+        data.online_since,
+        data.state_id,
+        data.latest_renovation,
+        data.facades, 
+        data.price,
+        data.energylabel_id,
+        data.realestate_agency_id,
+        data.realestate_agent_id
+      ],
+    };
+
+    const rows = await pool.query(houseQuery);
+
+    res.json( rows );
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.patch("/makelaar/updatehouse/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const data = req.body;
+
+  let values = [id];
+  let queryValues = [];
+  let index = 2;
+
+  for (const key in data) {
+    if (data[key].length !== 0) {
+
+      queryValues.push(key + ' = $' + index);
+      values.push(data[key]);
+
+      index++;
+    }
+  }
+
+  const updateQuery = {
+    text: `UPDATE houses SET ${queryValues} WHERE id = $1 RETURNING *`,
+    values: values
+  };
+
+  const rows = await pool.query(updateQuery);
+  res.json( rows );
+
+});
 
 };
-
 
 const registerAdminRoutes = (app) => {
   const adminRouter = Router();

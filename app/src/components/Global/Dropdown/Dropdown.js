@@ -1,6 +1,6 @@
-import "./Input.css";
+import "./Dropdown.css";
 
-const Input = ({ type, name, value, onChange, disabled = false }) => {
+const Dropdown = ({ type, name, value, onChange, disabled = false }) => {
   return (
     <div>
     <label htmlFor={name}>{name}</label>
@@ -18,4 +18,4 @@ const Input = ({ type, name, value, onChange, disabled = false }) => {
   );
 };
 
-export default Input;
+export default Dropdown;
