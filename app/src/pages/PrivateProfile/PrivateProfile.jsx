@@ -56,7 +56,18 @@ const PrivateProfile = () => {
 
   const { data: messages } = useFetch(`/getmessages/${id}`);
 
+  const deleteBuilding = (e, building_id) => {
+    e.preventDefault();
 
+    let data = { id, building_id }
+    console.log(data)
+
+  
+    mutate(`${process.env.REACT_APP_API_URL}/deletebuilding`, {
+      method: "DELETE",
+      data,
+    });
+  };
   
 
   // console.log(savedbuildings && userinfo);
@@ -188,7 +199,7 @@ const PrivateProfile = () => {
 
           <Grid>
             {savedbuildings.map((house, index) => {
-              return <HouseCard house={house} key={index} />;
+              return <HouseCard house={house} key={index} saveButtonContent={"Verwijder uit opgeslagen panden"} ButtonOnClick={(e) => {deleteBuilding(house.id)}}/>;
             })}
           </Grid>
         </Container>

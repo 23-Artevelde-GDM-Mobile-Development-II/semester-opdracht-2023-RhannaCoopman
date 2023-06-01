@@ -93,7 +93,7 @@ const registerRegularRoutes = (app) => {
       // Retrieve house information from the database based on the id
       // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
       const query = {
-        text: "SELECT houses.*, energylabel.name as energylabel, house_type.name as housetype, city.cityname as cityname, city.citycode as citycode, building_type.name as buildingtype, windowtypes.name as windowtype, state.name as state, status.name as status FROM houses INNER JOIN energylabel ON houses.energylabel_id = energylabel.id INNER JOIN house_type ON houses.house_type_id = house_type.id INNER JOIN city ON houses.city_id = city.id INNER JOIN building_type ON houses.buildings_id = building_type.id INNER JOIN windowtypes ON houses.windowtype_id = windowtypes.id INNER JOIN state ON houses.state_id = state.id INNER JOIN status ON houses.status_id = status.id WHERE houses.id = $1",
+        text: "SELECT houses.*, energylabel.name as energylabel, house_type.name as housetype, city.name as cityname, city.citycode as citycode, building_type.name as buildingtype, windowtypes.name as windowtype, state.name as state, status.name as status FROM houses INNER JOIN energylabel ON houses.energylabel_id = energylabel.id INNER JOIN house_type ON houses.house_type_id = house_type.id INNER JOIN city ON houses.city_id = city.id INNER JOIN building_type ON houses.buildings_id = building_type.id INNER JOIN windowtypes ON houses.windowtype_id = windowtypes.id INNER JOIN state ON houses.state_id = state.id INNER JOIN status ON houses.status_id = status.id WHERE houses.id = $1",
         values: [id],
       };
       const { rows } = await pool.query(query);
@@ -268,7 +268,7 @@ app.get("/mysavedbuildings/:id", async (req, res) => {
     // Retrieve house information from the database based on the id
     // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
     const query = {
-      text: "SELECT * FROM saved_buildings WHERE user_id = $1",
+      text: "SELECT * FROM saved_buildings INNER JOIN houses ON saved_buildings.building_id = houses.id  WHERE user_id = $1",
       values: [id],
     };
     const { rows } = await pool.query(query);
@@ -322,9 +322,7 @@ app.get("/getmessages/:id", async (req, res) => {
     const { rows } = await pool.query(query);
     const messages = rows;
 
-    console.log(messages)
     res.json(messages);
-    console.log(messages)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -482,6 +480,46 @@ app.delete('/makelaar/deletehouse/:id', async (req, res) => {
   try {
       const id = req.params.id
       const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
+      res.json(rows)
+  } catch (err) {
+      console.log(err.message)
+      res.status(500).send('Server error')
+  }
+})
+
+app.post("/savebuilding", async (req, res) => {
+
+  const data = req.body;
+
+  console.log(data);
+
+  try {
+
+    // Insert the message into the database
+    const saveQuery = {
+      text: "INSERT INTO saved_buildings (user_id, building_id) VALUES ($1, $2) RETURNING *",
+      values: [
+        data.user_id,
+        data.building_id,
+      ],
+    };
+    const rows = await pool.query(saveQuery);
+
+    res.json( rows );
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.delete('/deletebuilding', async (req, res) => {
+  const data = req.body;
+
+  console.log(data)
+
+  try {
+      const { rows }  = await pool.query('DELETE FROM saved_buildings WHERE user_id = $1 AND building_id = $2 RETURNING *', [data.id, data.building_id])
       res.json(rows)
   } catch (err) {
       console.log(err.message)

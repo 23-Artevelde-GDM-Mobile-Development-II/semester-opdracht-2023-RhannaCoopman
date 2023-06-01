@@ -7,9 +7,14 @@ import FullwidthContainer from '../../Components/Containers/FullwidthContainer.j
 import Container from '../../Components/Containers/Container.js';
 import SmallContainer from '../../Components/Containers/SmallContainer.js';
 import Grid from '../../Components/Grids/Grid';
+import { useAuthContext } from '../../contexts/AuthContainer';
 
 
 const Home = () => {
+
+    const user = useAuthContext();
+    let user_id = user.user.id;
+
 
     // const [data, setData] = useState();
     const [filteredData, setFilteredData] = useState();
@@ -33,6 +38,19 @@ const Home = () => {
 
         console.log(searchValues);
     }
+    const { mutate } = useMutation();
+
+    const saveBuilding = (building_id, e) => {
+        // e.preventDefault();
+
+        let data = { user_id, building_id }
+    
+      
+        mutate(`${process.env.REACT_APP_API_URL}/savebuilding`, {
+          method: "POST",
+          data,
+        });
+      };
 
 
     const {
@@ -238,7 +256,7 @@ const Home = () => {
     
 {                       houses.map((house, index) => {
                             return (
-                                <HouseCard house={house} key={index}/>
+                                <HouseCard house={house} key={index} saveButtonContent={"Sla pand op"} ButtonOnClick={() => {saveBuilding(house.id)}}/>
                             )
                         })}
     
