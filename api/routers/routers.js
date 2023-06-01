@@ -361,16 +361,15 @@ app.patch("/updateUserData/:id", async (req, res) => {
 });
 
 app.post("/makelaar/createhouse", async (req, res) => {
-
-  const data = req.body;
-
-  console.log(data);
-
   try {
+
+    const data = req.body;
+
+    console.log(data)
 
     // Insert the message into the database
     const houseQuery = {
-      text: "INSERT INTO houses (name, description, image, house_type_id, housenumber, streetname, city_id, status_id, bedrooms, bathrooms, toilets, attic, basement, garage, swimmingspool, parkingspots, habitable_surface, garden_surface, lot_surface, construction_year, buildings_id, cadastral_income, solar_panels, windowtype_id, elevator, available, online_since, state_id, latest_renovation, facades,  price, energylabel_id, realestate_agency_id, realestate_agent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34) RETURNING *",
+      text: "INSERT INTO houses (name, description, images, house_type_id, housenumber, streetname, city_id, status_id, bedrooms, bathrooms, toilets, attic, basement, garage, swimmingpool, parkingspots, habitable_surface, garden_surface, lot_surface, construction_year, buildings_id, cadastral_income, solar_panels, windowtype_id, elevator, available, online_since, state_id, latest_renovation, facades,  price, energylabel_id, realestate_agency_id, realestate_agent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34) RETURNING *",
       values: [
         data.name,
         data.description,
@@ -447,6 +446,35 @@ app.patch("/makelaar/updatehouse/:id", async (req, res) => {
   res.json( rows );
 
 });
+
+app.get("/makelaar/gethouseoptions", async (req, res) => {
+  try {
+    
+    const houseTypeQuery = await pool.query("SELECT * FROM house_type");
+    const cityQuery = await pool.query("SELECT * FROM city");
+    const statusQuery = await pool.query("SELECT * FROM status");
+    const buildingTypeQuery = await pool.query("SELECT * FROM building_type");
+    const windowTypesQuery = await pool.query("SELECT * FROM windowtypes");
+    const stateQuery = await pool.query("SELECT * FROM state");
+    const energyLabelQuery = await pool.query("SELECT * FROM energylabel");
+
+    const houseOptions = {
+      house_type: houseTypeQuery.rows,
+      city: cityQuery.rows,
+      status: statusQuery.rows,
+      building_type: buildingTypeQuery.rows,
+      windowtypes: windowTypesQuery.rows,
+      state: stateQuery.rows,
+      energylabel: energyLabelQuery.rows,
+    };
+
+    res.json(houseOptions);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server error');
+  }
+})
 
 };
 

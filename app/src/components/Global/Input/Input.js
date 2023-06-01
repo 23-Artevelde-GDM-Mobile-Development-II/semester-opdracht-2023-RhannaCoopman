@@ -2,8 +2,9 @@ import "./Input.css";
 
 const Input = ({ type, name, labelname, value, onChange, disabled = false }) => {
   return (
+
     <div>
-    <label htmlFor={name}>{labelname}</label>
+    <label htmlFor={name}>{labelname}
     <input
       className="form__input"
       type={type}
@@ -13,6 +14,7 @@ const Input = ({ type, name, labelname, value, onChange, disabled = false }) => 
       onChange={onChange}
       disabled={disabled}
     />
+    </label>
     </div>
 
   );
