@@ -7,6 +7,9 @@ import Loading from "../../Components/Global/loading/loading";
 import HouseCard from "../../Components/houseCard/HouseCard";
 import useMutation from "../../hooks/useMutation";
 import style from "./PrivateProfile.module.css";
+import { Link } from "react-router-dom";
+import Button from "../../Components/Global/Button/Button";
+import Input from "../../Components/Global/Input/Input";
 
 const PrivateProfile = () => {
   
@@ -51,6 +54,11 @@ const PrivateProfile = () => {
     data: conversations,
   } = useFetch(`/mymessages/${id}`);
 
+  const { data: messages } = useFetch(`/getmessages/${id}`);
+
+
+  
+
   // console.log(savedbuildings && userinfo);
 
   if (error) {
@@ -61,7 +69,7 @@ const PrivateProfile = () => {
     return <Loading />;
   }
 
-  console.log(conversations);
+  console.log(messages);
 
   // Async function which sets the values for search
   const handleChange = async (e) => {
@@ -93,11 +101,15 @@ const PrivateProfile = () => {
     });
   };
 
+  const handleGetMessages = (id) => {
+    // e.preventDefault();
+    console.log(id)
+
+
+  };
+
   const handleUpdateUserData = (e) => {
     e.preventDefault();
-
-    console.log(updatedUserData);
-
 
     mutate(`${process.env.REACT_APP_API_URL}/updateUserData/${id}`, {
       method: "PATCH",
@@ -185,57 +197,42 @@ const PrivateProfile = () => {
           <h1>Mijn berichten</h1>
 
           <section id="" className="">
-            <div>
-              {conversations.map((message, index) => {
-                const previousMessage =
-                  index > 0 ? conversations[index - 1] : null;
-                const isDifferentConversation =
-                  previousMessage &&
-                  message.conversation_id !== previousMessage.conversation_id;
+            {conversations.map((conversation, index) => {
+                return (
+                  
+                  <div className="card">
+  
+                      <div className={"card__text"}>
+                          <h4 className={"card__text__title"}>{conversation.username} ({conversation.realestate_name})</h4>
+  
+                          <p className={"card__text__attributes"}>#{conversation.building_id}</p>
+  
+                          <p className={"card__text__location_place"}>{conversation.house_name}</p>
 
-                if (isDifferentConversation) {
-                  return (
-                    <React.Fragment key={message.id}>
-                      <Container>
-                        <form className="form">
-                          {/* Location */}
-                          <div className="form__field form__field--small">
-                            <div className="form__label">
-                              <label
-                                className="form__label"
-                                htmlFor="messagecontent"
-                              >
-                                Typ uw bericht...
-                              </label>
-                            </div>
+                          <hr></hr>
 
-                            <input
-                              type={"text"}
-                              onChange={handleChange}
-                              value={data.messagecontent}
-                              name="messagecontent"
-                              id={"messagecontent"}
-                              placeholder={"Typ om op titel te zoeken"}
-                            />
-                          </div>
+                          {messages.map((message, index) => {
+                            if (message.conversation_id === conversation.id) {
+                              return (
+                                <article>
+                                  <h4 className={"card__text__title"}>{conversation.username}</h4>
+  
+                                  <p className={"card__text__attributes"}>{message.content}</p>
 
-                          <button
-                            className="btn btn--primary"
-                            onClick={handleSend}
-                          >
-                            Ontdek onze panden
-                          </button>
-                        </form>
-                      </Container>
-                      <hr></hr>
-                      <div>{message.content}</div>
-                    </React.Fragment>
-                  );
-                }
+                                  <p className={"card__text__location_place"}>{message.send_time}</p>
+                                </article>
+                              )
+                            }
 
-                return <div key={message.id}>{message.content}</div>;
+                          
+                          })}
+
+                        <Input name="send_message" labelname="Typ hier uw bericht"></Input>
+                        <Button></Button>
+                      </div>
+                  </div>
+                );
               })}
-            </div>
           </section>
         </Container>
       </main>

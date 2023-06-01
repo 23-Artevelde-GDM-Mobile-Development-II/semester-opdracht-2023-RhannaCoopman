@@ -295,19 +295,36 @@ app.get("/mymessages/:id", async (req, res) => {
     // Retrieve house information from the database based on the id
     // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
     const query = {
-      text: "SELECT c.id AS conversation_id, c.building_id, m.id as message_id, m.sender_id, m.receiver_id, m.content, m.send_time FROM conversations AS c INNER JOIN messages AS m ON c.id = m.conversation_id WHERE m.sender_id = $1 OR m.receiver_id = $1 ORDER BY c.building_id, m.send_time;",
+      text: "SELECT conversations.*, users.username, users.agency_id, realestate_agency.name as realestate_name, houses.name as house_name FROM conversations INNER JOIN users ON conversations.participant_two = users.id LEFT OUTER JOIN realestate_agency ON users.agency_id = realestate_agency.id INNER JOIN houses ON conversations.building_id = houses.id where participant_one = $1 OR participant_two = $1",
       values: [id],
     };
     const { rows } = await pool.query(query);
-    const savedBuildings = rows;
+    const messages = rows;
 
-    // Check if a house with the provided id exists
-    if (!savedBuildings) {
-      return res.status(404).json({ error: "User not found" });
-    }
 
-    // Send the house data as a JSON response
-    res.json(savedBuildings);
+    res.json(messages);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/getmessages/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM messages WHERE sender_id = $1 OR receiver_id = $1 ORDER BY conversation_id, send_time ASC",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const messages = rows;
+
+    console.log(messages)
+    res.json(messages);
+    console.log(messages)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

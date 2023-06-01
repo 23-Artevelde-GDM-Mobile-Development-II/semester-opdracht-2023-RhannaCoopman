@@ -1,9 +1,9 @@
 import "./Input.css";
 
-const Input = ({ type, name, value, onChange, disabled = false }) => {
+const Input = ({ type, name, labelname, value, onChange, disabled = false }) => {
   return (
     <div>
-    <label htmlFor={name}>{name}</label>
+    <label htmlFor={name}>{labelname}</label>
     <input
       className="form__input"
       type={type}

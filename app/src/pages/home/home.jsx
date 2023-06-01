@@ -51,22 +51,7 @@ const Home = () => {
     return <p>loading...</p>;
   }
 
-    
 
-    // const handleGetDefault = async () => {
-    //     //Een basis fetch op onze gemaakte API
-    //     //De response die we terug krijgen is een gewone string, om dit om te zetten gebruiken we
-    //     //de build in .json() functie
-    //     const responses = await fetch('http://127.0.0.1:5000/houses', {
-    //         method: "GET"
-    //     }).then(response => response.json())
-
-    //     //De respons die ik krijg zet ik in mijn variabele. Ik vorm deze terug om naar een string
-    //     // zodat ik die gewoon in mijn pagina kan plaatsen om eens te bekijken. Voor de meeste use-cases is dit niet nodig
-    //     const value = responses;
-    //     setData(value);
-    //     console.log(value)
-    // }
 
 
   // Function that filters the blogpost on the searchValues
@@ -97,19 +82,7 @@ const Home = () => {
         console.log(filteredData)
 }
 
-//   // Stores fetched data
-//     useEffect(() => {
-//         let isActive = true;
 
-//         if(!data){
-//             if(isActive) {
-//                 handleGetDefault()
-//             }
-//         }
-//         return () => isActive = false;
-//     }, [])
-
-    
     // Renders
         // If there is  no data (yet), shows loading screen
     if(!houses) {
