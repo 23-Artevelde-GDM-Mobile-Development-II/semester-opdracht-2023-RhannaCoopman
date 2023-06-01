@@ -478,6 +478,17 @@ app.get("/makelaar/gethouseoptions", async (req, res) => {
   }
 })
 
+app.delete('/makelaar/deletehouse/:id', async (req, res) => {
+  try {
+      const id = req.params.id
+      const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
+      res.json(rows)
+  } catch (err) {
+      console.log(err.message)
+      res.status(500).send('Server error')
+  }
+})
+
 };
 
 const registerAdminRoutes = (app) => {

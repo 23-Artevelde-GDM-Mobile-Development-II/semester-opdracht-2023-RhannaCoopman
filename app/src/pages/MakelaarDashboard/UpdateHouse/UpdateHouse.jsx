@@ -83,10 +83,20 @@ const UpdateHouse = () => {
     });
   };
 
+  const deleteHouse = (e) => {
+    e.preventDefault();
+  
+    mutate(`${process.env.REACT_APP_API_URL}/makelaar/deletehouse/${id}`, {
+      method: "DELETE"
+    });
+  };
+
   if (houseOptions) {
     return (
       <Container>
         <h1>Update pand #{id}</h1>
+        <Button onClick={deleteHouse}>Verwijder huis</Button>
+
         <form>
           <Grid>
             {/* name */}
