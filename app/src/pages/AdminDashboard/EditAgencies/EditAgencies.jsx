@@ -9,7 +9,6 @@ import useFetch from "../../../hooks/useFetch";
 import Loading from "../../../Components/Global/loading/loading";
 
 const EditAgencies = () => {
-
   const { id } = useParams();
 
   const { mutate } = useMutation();
@@ -36,7 +35,7 @@ const EditAgencies = () => {
 
   const updateAgency = (e) => {
     e.preventDefault();
-  
+
     mutate(`${process.env.REACT_APP_API_URL}/admin/updateagency/${id}`, {
       method: "PATCH",
       data: values,
@@ -45,9 +44,9 @@ const EditAgencies = () => {
 
   const deleteAgency = (e) => {
     e.preventDefault();
-  
+
     mutate(`${process.env.REACT_APP_API_URL}/admin/deleteagency/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   };
 
@@ -67,7 +66,6 @@ const EditAgencies = () => {
         <Container>
           <p>Naam</p>
           <p>Beschrijving</p>
-
         </Container>
 
         <Container>
@@ -92,9 +90,8 @@ const EditAgencies = () => {
               placeholder={agenciesData.description}
             ></Input>
 
-<Button onClick={updateAgency}>Update kantoor</Button>
-<Button onClick={deleteAgency}>Verwijder kantoor</Button>
-
+            <Button onClick={updateAgency}>Update kantoor</Button>
+            <Button onClick={deleteAgency}>Verwijder kantoor</Button>
           </form>
         </Container>
       </Grid>

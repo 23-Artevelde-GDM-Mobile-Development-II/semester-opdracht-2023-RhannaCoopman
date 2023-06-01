@@ -23,12 +23,22 @@ const AdminDashboard = () => {
     // } = useFetch("/admin/gethouses");
 
     // get all realestate agencies from database
+    // const {
+    //   isLoading,
+    //   error,
+    //   invalidate,
+    //   data: allAgencies,
+    // } = useFetch("/admin/getagencies");
+
+    // get all database tables from database
     const {
       isLoading,
       error,
       invalidate,
-      data: allAgencies,
-    } = useFetch("/admin/getagencies");
+      data: allTables,
+    } = useFetch("/admin/getdatabase");
+
+    console.log(allTables);
 
   if (error) {
     return <p>{error}</p>;
@@ -74,7 +84,7 @@ const AdminDashboard = () => {
         </table>
       </Container> */}
 
-      {/* <Container id="adminDatabaseContainer">
+      {/* <Container id="adminBuildingsContainer">
 
         <h1>Huizen beheren</h1>
 
@@ -109,7 +119,7 @@ const AdminDashboard = () => {
 
       </Container> */}
   
-      <Container id="adminRealEstateAgenciesContainer">
+      {/* <Container id="adminRealEstateAgenciesContainer">
 
         <h1>Makelaarkantoren beheren</h1>
 
@@ -134,7 +144,7 @@ const AdminDashboard = () => {
                   <td>{agency.description}</td>
 
                   <Link to={`/admin/editagency/${agency.id}`} key={'edit_' + agency.id} className="link">Bewerk kantoor</Link>
-                  {/* <Link to={`/agency/${agency.id}`} key={'view_' + agency.id} className="link">Bekijk kantoor</Link> */}
+                  <Link to={`/agency/${agency.id}`} key={'view_' + agency.id} className="link">Bekijk kantoor</Link>
 
                 </tr>
               );
@@ -142,10 +152,49 @@ const AdminDashboard = () => {
           </tbody>
         </table>
 
-      </Container>
+      </Container> */}
+
+<Container id="adminDatabaseContainer">
 
 
-      <Container id="adminBuildingsContainer"></Container>
+</Container>
+
+      {/* <Container id="adminDatabaseContainer">
+
+        <h1>Database beheren</h1>
+
+
+
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Naam</th>
+              <th scope="col">Beschrijving</th>
+
+              <th scope="col">Bewerk kantoor</th>
+              <th scope="col">Bekijk kantoor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allAgencies.map((agency, index) => {
+              return (
+                <tr key={index}>
+                  <th>{agency.id}</th>
+
+                  <td>{agency.name}</td>
+                  <td>{agency.description}</td>
+
+                  <Link to={`/admin/editagency/${agency.id}`} key={'edit_' + agency.id} className="link">Bewerk kantoor</Link>
+                  <Link to={`/agency/${agency.id}`} key={'view_' + agency.id} className="link">Bekijk kantoor</Link>
+
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+      </Container> */}
     </Container>
   );
 };

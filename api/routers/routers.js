@@ -487,6 +487,22 @@ app.delete('/makelaar/deletehouse/:id', async (req, res) => {
   }
 })
 
+app.get("/makelaar/housesoverview/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+
+    const {rows} = await pool.query("SELECT * FROM houses WHERE realestate_agency_id = $1", [id]);
+
+    res.json(rows);
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/savebuilding", async (req, res) => {
 
   const data = req.body;

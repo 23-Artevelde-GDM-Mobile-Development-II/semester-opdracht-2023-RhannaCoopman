@@ -16,6 +16,7 @@ import AdminDashboard from "./AdminDashboard/AdminDashboard";
 import EditUser from "./AdminDashboard/EditUser/EditUser";
 import EditBuilding from "./AdminDashboard/EditBuilding/EditBuilding";
 import EditAgencies from "./AdminDashboard/EditAgencies/EditAgencies";
+import MakelaarDashboard from "./MakelaarDashboard/MakelaarDashboard";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/myprofile" element={<Dashboard />} />
           <Route path="/profile/:id" element={<GlobalProfile />} />
 
+          <Route path="/makelaar/dashboard" element={<MakelaarDashboard />} />
           <Route path="/makelaar/createhouse" element={<CreateHouse />} />
           <Route path="/makelaar/updatehouse/:id" element={<UpdateHouse />} />
 
