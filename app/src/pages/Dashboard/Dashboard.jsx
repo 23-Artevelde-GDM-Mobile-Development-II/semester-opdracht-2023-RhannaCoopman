@@ -6,15 +6,16 @@ import useFetch from "../../hooks/useFetch";
 import Loading from "../../Components/Global/loading/loading";
 import HouseCard from "../../Components/houseCard/HouseCard";
 import useMutation from "../../hooks/useMutation";
-import style from "./PrivateProfile.module.css";
+import style from "./Dashboard.module.css";
 import { Link } from "react-router-dom";
 import Button from "../../Components/Global/Button/Button";
 import Input from "../../Components/Global/Input/Input";
 
-const PrivateProfile = () => {
+const Dashboard = () => {
   
   const userObject = useAuthContext();
   const id = userObject.user.id;
+  const user_level = userObject.user.user_level;
 
   const { mutate } = useMutation();
 
@@ -251,4 +252,4 @@ const PrivateProfile = () => {
   }
 };
 
-export default PrivateProfile;
+export default Dashboard;

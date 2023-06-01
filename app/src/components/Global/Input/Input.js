@@ -1,6 +1,6 @@
 import "./Input.css";
 
-const Input = ({ type, name, labelname, value, onChange, disabled = false }) => {
+const Input = ({ type, name, labelname, value, placeholder, onChange, disabled = false }) => {
   return (
 
     <div>
@@ -13,6 +13,7 @@ const Input = ({ type, name, labelname, value, onChange, disabled = false }) => 
       value={value}
       onChange={onChange}
       disabled={disabled}
+      placeholder={placeholder}
     />
     </label>
     </div>
