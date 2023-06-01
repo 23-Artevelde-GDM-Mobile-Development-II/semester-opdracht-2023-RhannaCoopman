@@ -681,7 +681,7 @@ app.get("/admin/getbuilding/:id", async (req, res) => {
 
     // Check if a house with the provided id exists
     if (!house) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "House not found" });
     }
 
     // Send the house data as a JSON response
@@ -727,6 +727,74 @@ app.delete('/admin/deletebuilding/:id', async (req, res) => {
 
   try {
       const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
+      res.json(rows)
+  } catch (err) {
+      console.log(err.message)
+      res.status(500).send('Server error')
+  }
+})
+
+app.get("/admin/getagency/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Retrieve house information from the database based on the id
+    // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
+    const query = {
+      text: "SELECT * FROM realestate_agency WHERE id = $1",
+      values: [id],
+    };
+    const { rows } = await pool.query(query);
+    const user = rows[0];
+
+    // Check if a house with the provided id exists
+    if (!user) {
+      return res.status(404).json({ error: "Agency not found" });
+    }
+
+    // Send the house data as a JSON response
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.patch("/admin/updateagency/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const data = req.body;
+
+  let values = [id];
+  let queryValues = [];
+  let index = 2;
+
+  for (const key in data) {
+    if (data[key].length !== 0) {
+
+      queryValues.push(key + ' = $' + index);
+      values.push(data[key]);
+
+      index++;
+    }
+  }
+
+  const updateQuery = {
+    text: `UPDATE realestate_agency SET ${queryValues} WHERE id = $1 RETURNING *`,
+    values: values
+  };
+
+  const rows = await pool.query(updateQuery);
+  res.json( rows );
+
+});
+
+app.delete('/admin/deleteagency/:id', async (req, res) => {
+
+  const id = req.params.id;
+
+  try {
+      const { rows }  = await pool.query('DELETE FROM realestate_agency WHERE id = $1 RETURNING *', [id])
       res.json(rows)
   } catch (err) {
       console.log(err.message)

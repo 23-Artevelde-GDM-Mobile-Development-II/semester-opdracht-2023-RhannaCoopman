@@ -15,6 +15,7 @@ import CreateHouse from "./MakelaarDashboard/CreateHouse/CreateHouse";
 import AdminDashboard from "./AdminDashboard/AdminDashboard";
 import EditUser from "./AdminDashboard/EditUser/EditUser";
 import EditBuilding from "./AdminDashboard/EditBuilding/EditBuilding";
+import EditAgencies from "./AdminDashboard/EditAgencies/EditAgencies";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/edituser/:id" element={<EditUser />} />
           <Route path="/admin/editbuilding/:id" element={<EditBuilding />} />
+          <Route path="/admin/editagency/:id" element={<EditAgencies />} />
 
 
           <Route path="/test" element={<TestTest />} />
