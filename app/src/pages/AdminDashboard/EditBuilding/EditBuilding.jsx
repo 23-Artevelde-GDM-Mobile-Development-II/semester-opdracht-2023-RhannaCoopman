@@ -10,7 +10,7 @@ import Button from "../../../Components/Global/Button/Button";
 import Grid from "../../../Components/Grids/Grid";
 
 
-const UpdateHouse = () => {
+const EditBuilding = () => {
 
   const { id } = useParams();
 
@@ -369,4 +369,4 @@ const UpdateHouse = () => {
   }
 };
 
-export default UpdateHouse;
+export default EditBuilding;
