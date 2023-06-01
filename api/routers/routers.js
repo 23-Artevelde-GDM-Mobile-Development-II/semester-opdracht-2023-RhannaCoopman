@@ -423,12 +423,14 @@ app.patch("/makelaar/updatehouse/:id", async (req, res) => {
 
   const data = req.body;
 
+  console.log(data);
+
   let values = [id];
   let queryValues = [];
   let index = 2;
 
   for (const key in data) {
-    if (data[key].length !== 0) {
+    if (data[key] !== null && data[key].length !== 0) {
 
       queryValues.push(key + ' = $' + index);
       values.push(data[key]);

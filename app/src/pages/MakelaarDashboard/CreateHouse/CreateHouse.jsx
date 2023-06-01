@@ -7,6 +7,7 @@ import Grid from "../../../Components/Grids/Grid";
 import Button from "../../../Components/Global/Button/Button";
 import useMutation from "../../../hooks/useMutation";
 import { useAuthContext } from "../../../contexts/AuthContainer";
+import Loading from "../../../Components/Global/loading/loading";
 
 const CreateHouse = () => {
 
@@ -66,7 +67,7 @@ const CreateHouse = () => {
   }
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return <Loading/>;
   }
 
   const handleChange = async (e) => {
