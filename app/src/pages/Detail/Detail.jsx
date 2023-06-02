@@ -284,13 +284,13 @@ const handleChange = async e => {
         <label htmlFor="message">Bericht</label>
         <Input name="message" value={data.message} onChange={handleChange} />
 
-        <Button type="post" disabled={isLoading} onClick={handleSend}>Registreer</Button>
+        <Button type="post" disabled={isLoading} onClick={handleSend}>Verzend</Button>
       </form>
     </Container>
 
 
 
-      <section className={style.floating__contactbar}>
+      {/* <section className={style.floating__contactbar}>
         <Link to={`${ROUTES.contact.to}${house.id}`} key={house.id}>
           <button className={`${style.btn} ${style.btnPrimary}`}>
             Neem contact op
@@ -317,7 +317,7 @@ const handleChange = async e => {
           </div>
         </div>
 
-    </section>
+    </section> */}
     </main>
   );
 

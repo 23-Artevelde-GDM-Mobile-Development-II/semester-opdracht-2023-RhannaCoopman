@@ -28,7 +28,6 @@ const Home = () => {
         max_surface: '',
         min_rooms: '',
         max_rooms: '',
-        status: '',
     })
 
     // Async function which sets the values for search
@@ -143,7 +142,6 @@ const Home = () => {
                                     <input type={'number'} onChange={handleChange} value={searchValues.max_price | null} name='max_price' 
                                     className={`${style.form__input} ${style.form__input__text}`} id={'filter_max_price'}
                                     placeholder={'Maximum prijs'}  />
-    
                                 </div>
     
                                 {/* Habitable surface */}

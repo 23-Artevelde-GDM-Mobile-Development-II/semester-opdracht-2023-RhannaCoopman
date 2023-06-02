@@ -9,7 +9,7 @@ import Loading from '../../Components/Global/loading/loading';
 
 
 
-const Contact = ({ onLogin, initialError }) => {
+const Contact = () => {
 
   const { id } = useParams();
 
@@ -80,7 +80,6 @@ const handleSend = (e) => {
   return (
     <Container>
       <form onSubmit={handleSend}>
-        {error || initialError ? <p>{initialError ?? error}</p> : ''}
         {/* <label htmlFor="firstname">Firstname</label>
         <Input name="firstname" value={data.firstname} onChange={handleChange} />
         <label htmlFor="lastname">Lastname</label>

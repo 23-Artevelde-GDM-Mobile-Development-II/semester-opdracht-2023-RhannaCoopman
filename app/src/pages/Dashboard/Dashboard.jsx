@@ -57,8 +57,7 @@ const Dashboard = () => {
 
   const { data: messages } = useFetch(`/getmessages/${id}`);
 
-  const deleteBuilding = (e, building_id) => {
-    e.preventDefault();
+  const deleteBuilding = (building_id) => {
 
     let data = { id, building_id }
     console.log(data)
