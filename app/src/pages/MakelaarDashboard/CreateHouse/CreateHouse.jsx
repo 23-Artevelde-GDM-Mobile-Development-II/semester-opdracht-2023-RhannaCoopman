@@ -41,7 +41,7 @@ const CreateHouse = () => {
     windowtype_id: null,
     elevator: null,
     available: null,
-    online_since: null,
+    online_since: new Date().toISOString(),
     state_id: null,
     latest_renovation: null,
     facades: null,
@@ -98,6 +98,7 @@ const CreateHouse = () => {
               name={"name"}
               value={values.name}
               onChange={handleChange}
+              labelname={"Pand naam"}
             ></Input>
 
             {/* description */}
@@ -107,6 +108,7 @@ const CreateHouse = () => {
               name={"description"}
               value={values.description}
               onChange={handleChange}
+              labelname={"Pand beschrijving"}
             ></Input>
 
             {/* images */}
@@ -116,6 +118,7 @@ const CreateHouse = () => {
               name={"image"}
               value={values.image}
               onChange={handleChange}
+              labelname={"Pand afbeeldingen"}
             ></Input>
 
             {/* housenumber */}
@@ -125,6 +128,7 @@ const CreateHouse = () => {
               name={"housenumber"}
               value={values.housenumber}
               onChange={handleChange}
+              labelname={"Pand huisnummer"}
             ></Input>
 
             {/* street */}
@@ -134,6 +138,7 @@ const CreateHouse = () => {
               name={"streetname"}
               value={values.streetname}
               onChange={handleChange}
+              labelname={"Pand straat"}
             ></Input>
 
             {/* city */}
@@ -192,6 +197,7 @@ const CreateHouse = () => {
               name={"bedrooms"}
               value={values.bedrooms}
               onChange={handleChange}
+              labelname={"Pand aantal slaapkamers"}
             ></Input>
 
             {/* number of bathrooms */}
@@ -201,6 +207,7 @@ const CreateHouse = () => {
               name={"bathrooms"}
               value={values.bathrooms}
               onChange={handleChange}
+              labelname={"Pand aantal badkamers"}
             ></Input>
 
             {/* number of toilets */}
@@ -210,6 +217,7 @@ const CreateHouse = () => {
               name={"toilets"}
               value={values.toilets}
               onChange={handleChange}
+              labelname={"Pand aantal toiletten"}
             ></Input>
 
             {/* attic */}
@@ -261,6 +269,7 @@ const CreateHouse = () => {
               name={"parkingspots"}
               value={values.parkingspots}
               onChange={handleChange}
+              labelname={"Pand aantal parkeerplelken"}
             ></Input>
 
             {/* habitable_surface */}
@@ -270,6 +279,7 @@ const CreateHouse = () => {
               name={"habitable_surface"}
               value={values.habitable_surface}
               onChange={handleChange}
+              labelname={"Pand bewoonbaar oppervlak"}
             ></Input>
 
             {/* garden_surface */}
@@ -279,6 +289,7 @@ const CreateHouse = () => {
               name={"garden_surface"}
               value={values.garden_surface}
               onChange={handleChange}
+              labelname={"Pand tuinoppervlak"}
             ></Input>
 
             {/* lot_surface */}
@@ -288,6 +299,7 @@ const CreateHouse = () => {
               name={"lot_surface"}
               value={values.lot_surface}
               onChange={handleChange}
+              labelname={"Pand grondoppervlak"}
             ></Input>
 
             {/* construction_year */}
@@ -297,6 +309,7 @@ const CreateHouse = () => {
               name={"construction_year"}
               value={values.construction_year}
               onChange={handleChange}
+              labelname={"Pand bouwjaar"}
             ></Input>
 
             {/* latest renovation */}
@@ -306,6 +319,7 @@ const CreateHouse = () => {
               name={"latest_renovation"}
               value={values.latest_renovation}
               onChange={handleChange}
+              labelname={"Pand laatste renovatie"}
             ></Input>
 
             {/* facades */}
@@ -315,6 +329,7 @@ const CreateHouse = () => {
               name={"facades"}
               value={values.facades}
               onChange={handleChange}
+              labelname={"Pand aantal facades"}
             ></Input>
 
             {/* price */}
@@ -324,6 +339,7 @@ const CreateHouse = () => {
               name={"price"}
               value={values.price}
               onChange={handleChange}
+              labelname={"Pand prijs"}
             ></Input>
 
             {/* cadastral_income */}
@@ -333,6 +349,7 @@ const CreateHouse = () => {
               name={"cadastral_income"}
               value={values.cadastral_income}
               onChange={handleChange}
+              labelname={"Pand kadastraal inkomen"}
             ></Input>
 
             {/* available at */}
@@ -342,16 +359,9 @@ const CreateHouse = () => {
               name={"available"}
               value={values.available}
               onChange={handleChange}
+              labelname={"Pand beschikbaar vanaf"}
             ></Input>
 
-            {/* online since */}
-            <Input
-              type={"date"}
-              id={"createhouse_online_since"}
-              name={"online_since"}
-              value={values.online_since}
-              onChange={handleChange}
-            ></Input>
           </Grid>
 
           <Button type="post" disabled={isLoading} onClick={createHouse}>Registreer</Button>

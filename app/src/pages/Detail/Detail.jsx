@@ -15,6 +15,7 @@ import { useAuthContext } from "../../contexts/AuthContainer.js";
 
 
 const Detail = () => {
+  const authUser = useAuthContext();
   const { id } = useParams();
 
   const [data, setData] = useState({
@@ -73,6 +74,7 @@ const handleChange = async e => {
     <Container id="titleContainer" className="smallContainer">
       <h1 className={style.title}>{house.name}</h1>
       <h3 className={style.title}>{house.price}</h3>
+      
       <p></p>
 
     </Container>

@@ -7,50 +7,44 @@ import { Link } from "react-router-dom";
 const AdminDashboard = () => {
 
   // get all users from database
-  // const {
-  //   isLoading,
-  //   error,
-  //   invalidate,
-  //   data: allUsers,
-  // } = useFetch("/admin/getusers");
+  const {
+    isLoading: usersIsLoading,
+    error: usersError,
+    data: allUsers,
+  } = useFetch("/admin/getusers");
 
-    // get all houses from database
-    // const {
-    //   isLoading,
-    //   error,
-    //   invalidate,
-    //   data: allHouses,
-    // } = useFetch("/admin/gethouses");
-
+      // get all houses from database
+      const {
+        isLoading: housesIsLoading,
+        error: housesError,
+        data: allHouses,
+      } = useFetch("/admin/gethouses");
+    
     // get all realestate agencies from database
-    // const {
-    //   isLoading,
-    //   error,
-    //   invalidate,
-    //   data: allAgencies,
-    // } = useFetch("/admin/getagencies");
-
-    // get all database tables from database
     const {
-      isLoading,
-      error,
-      invalidate,
-      data: allTables,
-    } = useFetch("/admin/getdatabase");
+      isLoading: agenciesIsLoading,
+      error: agenciesError,
+      data: allAgencies,
+    } = useFetch("/admin/getagencies");
 
-    console.log(allTables);
+        // get all database tables from database
+        const {
+          isLoading: databaseIsLoading,
+          error: databaseError,
+          data: allTables,
+        } = useFetch("/admin/getdatabase");
 
-  if (error) {
-    return <p>{error}</p>;
+  if (usersError, housesError, agenciesError, databaseError) {
+    return <p>Error</p>;
   }
 
-  if (isLoading) {
+  if (usersIsLoading, housesIsLoading, agenciesIsLoading, databaseIsLoading) {
     return <Loading />;
   }
 
   return (
     <Container>
-      {/* <Container id="adminUsersContainer">
+      <Container id="adminUsersContainer">
         <h1>Gebruikers beheren</h1>
 
         <table>
@@ -82,9 +76,9 @@ const AdminDashboard = () => {
             })}
           </tbody>
         </table>
-      </Container> */}
+      </Container>
 
-      {/* <Container id="adminBuildingsContainer">
+      <Container id="adminBuildingsContainer">
 
         <h1>Huizen beheren</h1>
 
@@ -117,9 +111,9 @@ const AdminDashboard = () => {
           </tbody>
         </table>
 
-      </Container> */}
+      </Container>
   
-      {/* <Container id="adminRealEstateAgenciesContainer">
+      <Container id="adminRealEstateAgenciesContainer">
 
         <h1>Makelaarkantoren beheren</h1>
 
@@ -131,7 +125,7 @@ const AdminDashboard = () => {
               <th scope="col">Beschrijving</th>
 
               <th scope="col">Bewerk kantoor</th>
-              <th scope="col">Bekijk kantoor</th>
+              {/* <th scope="col">Bekijk kantoor</th> */}
             </tr>
           </thead>
           <tbody>
@@ -144,7 +138,7 @@ const AdminDashboard = () => {
                   <td>{agency.description}</td>
 
                   <Link to={`/admin/editagency/${agency.id}`} key={'edit_' + agency.id} className="link">Bewerk kantoor</Link>
-                  <Link to={`/agency/${agency.id}`} key={'view_' + agency.id} className="link">Bekijk kantoor</Link>
+                  {/* <Link to={`/agency/${agency.id}`} key={'view_' + agency.id} className="link">Bekijk kantoor</Link> */}
 
                 </tr>
               );
@@ -152,20 +146,18 @@ const AdminDashboard = () => {
           </tbody>
         </table>
 
-      </Container> */}
+      </Container>
 
 <Container id="adminDatabaseContainer">
 
 
 </Container>
 
-      {/* <Container id="adminDatabaseContainer">
+      <Container id="adminDatabaseContainer">
 
         <h1>Database beheren</h1>
 
-
-
-        <table>
+        {/* <table>
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -192,9 +184,9 @@ const AdminDashboard = () => {
               );
             })}
           </tbody>
-        </table>
+        </table> */}
 
-      </Container> */}
+      </Container>
     </Container>
   );
 };

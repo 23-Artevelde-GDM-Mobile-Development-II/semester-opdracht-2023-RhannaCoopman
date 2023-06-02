@@ -8,6 +8,7 @@ import Container from '../../Components/Containers/Container.js';
 import SmallContainer from '../../Components/Containers/SmallContainer.js';
 import Grid from '../../Components/Grids/Grid';
 import { useAuthContext } from '../../contexts/AuthContainer';
+import Dropdown from '../../Components/Global/Dropdown/Dropdown';
 
 
 const Home = () => {
@@ -27,6 +28,7 @@ const Home = () => {
         max_surface: '',
         min_rooms: '',
         max_rooms: '',
+        status: '',
     })
 
     // Async function which sets the values for search
@@ -199,6 +201,23 @@ const Home = () => {
                                     <input type={'text'} onChange={handleChange} value={searchValues.location} name='location' 
                                     className={`${style.form__input} ${style.form__input__text}`} id={'filter_location'}
                                     placeholder={'Typ om op titel te zoeken'}  />
+                                </div>
+
+                                {/* Status */}
+                                <div className="form__field form__field--small">
+                                    <Dropdown   name={"status"} onChange={handleChange}>
+                                    <option key={'tekoop'} value={1}>
+                                        Te koop
+                                    </option>
+                                    <option key={'tehuur'} value={2}>
+                                        Te huur
+                                    </option>
+                                    </Dropdown>
+                                    <div className="form__label"><label className="form__label" htmlFor='location'>Te koop of te huur</label></div>
+    
+                                    {/* <input type={'text'} onChange={handleChange} value={searchValues.status} name='status' 
+                                    className={`${style.form__input} ${style.form__input__text}`} id={'filter_status'}
+                                    placeholder={'Typ om op titel te zoeken'}  /> */}
                                 </div>
     
                                 {/* Price */}

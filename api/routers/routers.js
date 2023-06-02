@@ -295,7 +295,7 @@ app.get("/mymessages/:id", async (req, res) => {
     // Retrieve house information from the database based on the id
     // Query inner joins tables with houses-table and searches where houses.id is the same as in the parameter.
     const query = {
-      text: "SELECT conversations.*, users.username, users.agency_id, realestate_agency.name as realestate_name, houses.name as house_name FROM conversations INNER JOIN users ON conversations.participant_two = users.id LEFT OUTER JOIN realestate_agency ON users.agency_id = realestate_agency.id INNER JOIN houses ON conversations.building_id = houses.id where participant_one = $1 OR participant_two = $1",
+      text: "SELECT conversations.*, users.username, users.agency_id, realestate_agency.name as realestate_name, houses.name as house_name FROM conversations INNER JOIN users ON conversations.participant_one = users.id LEFT OUTER JOIN realestate_agency ON users.agency_id = realestate_agency.id INNER JOIN houses ON conversations.building_id = houses.id where participant_one = $1 OR participant_two = $1",
       values: [id],
     };
     const { rows } = await pool.query(query);
@@ -478,9 +478,14 @@ app.get("/makelaar/gethouseoptions", async (req, res) => {
 
 app.delete('/makelaar/deletehouse/:id', async (req, res) => {
   try {
-      const id = req.params.id
-      const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
-      res.json(rows)
+    const id = req.params.id
+    const { deleteMessages }  = await pool.query('DELETE FROM conversations WHERE building_id = $1 RETURNING *', [id])
+
+    const { deleteFavorites }  = await pool.query('DELETE FROM saved_buildings WHERE building_id = $1 RETURNING *', [id])
+
+    const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
+    
+    res.json(deleteFavorites, deleteMessages, rows)
   } catch (err) {
       console.log(err.message)
       res.status(500).send('Server error')
@@ -742,8 +747,11 @@ app.delete('/admin/deletebuilding/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-      const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
-      res.json(rows)
+      const { deleteFavorites }  = await pool.query('DELETE FROM saved_buildings WHERE building_id = $1 RETURNING *', [id])
+      res.json(deleteFavorites)
+
+      // const { rows }  = await pool.query('DELETE FROM houses WHERE id = $1 RETURNING *', [id])
+      // res.json(rows)
   } catch (err) {
       console.log(err.message)
       res.status(500).send('Server error')

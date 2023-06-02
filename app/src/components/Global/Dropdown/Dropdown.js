@@ -50,7 +50,7 @@ const Dropdown = ({
       <label>
         Kies één:
         <select name={name} onChange={onChange}>
-          {children}
+
         </select>
       </label>
     </div>
